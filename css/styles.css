@@ -13,4 +13,13 @@ body {
 #resultados {
   font-size: 20px;
   margin: 20px 0;
+  text-align: center;
+}
+
+.jugador {
+  font-weight: 700;
+}
+
+.jugada {
+  font-weight: 700;
 }
