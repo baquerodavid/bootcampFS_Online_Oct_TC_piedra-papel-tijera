@@ -6,84 +6,141 @@ let pcPoints = 0;
 const btnPiedra = document.querySelector('button[data-jugada="piedra"]');
 const btnPapel = document.querySelector('button[data-jugada="papel"]');
 const btnTijera = document.querySelector('button[data-jugada="tijera"]');
-
 const contadorUsuario = document.getElementById("contador-usuario");
 const contadorMaquina = document.getElementById("contador-ordenador");
-
 const resultados = document.getElementById("resultados");
+//iconos
+const iconos = ["✊", "✋", "✌️"];
+const win = document.createElement("p");
+const textWin = "Ganaste";
+const textLose = "Perdiste";
+const jugada = document.createElement("p");
+const loading = document.createElement("p");
+let pcIcon = "";
+let userWin = false;
+let pcWin = false;
 
 btnPiedra.addEventListener("click", function () {
-  //guardar eleccion
-  const userJugada = "piedra";
-  //compararar con maquina
+  //inicializamos valores
+  const userIcon = "✊";
   const pcJugada = opciones[Math.floor(Math.random() * 3)];
+  win.className = ""; //eliminamos las clases de win
+
   //comparar con la maquina
   if (pcJugada === "tijera") {
+    pcIcon = "✌️";
     //sumar puntos
     userPoints++; //gana user
+    win.textContent = textWin;
+    win.classList.add("win");
+    userWin = true;
   } else if (pcJugada === "papel") {
+    pcIcon = "✋";
     pcPoints++; //gana pc
+    pcWin = true;
+    win.textContent = textLose;
+    win.classList.add("lose");
+  } else {
+    pcIcon = userIcon;
+    win.classList.add("win");
+    win.textContent = "Empate";
   }
-  //   console.log("Maquina Jugó ", pcJugada);
-  //   console.log("Usuario Jugó ", userJugada);
-  //   console.log("Maquina: ", pcPoints, "user: ", userPoints);
-  const jugada = document.createElement("p");
-  jugada.textContent = `La jugada del usuario es: ${userJugada} y la jugada del ordenador es: ${pcJugada}.`;
+  //mostar la jugada en el html
   resultados.textContent = "";
-  resultados.appendChild(jugada);
+  loading.textContent = "Jugando CPU...";
+  loading.classList.add("loading");
+  resultados.appendChild(loading);
+  setTimeout(() => {
+    loading.textContent = "";
+    jugada.textContent = ` ✊ VS ${pcIcon}`;
+    resultados.appendChild(jugada);
+    win.classList.add("pulse");
+    resultados.appendChild(win);
+  }, 800);
 
+  //contadores
   contadorUsuario.innerHTML = `<p id="contador-usuario">Tus puntos: ${userPoints}</p>`;
   contadorMaquina.innerHTML = `<p id='contador-ordenador'>Punatos de la máquina: ${pcPoints}</p>`;
 });
 
 btnPapel.addEventListener("click", function () {
-  const userJugada = "papel";
+  const userIcon = "✋";
   const pcJugada = opciones[Math.floor(Math.random() * 3)];
-  if (pcJugada == "piedra") {
-    userPoints += 1;
-  } else if (pcJugada == "tijera") {
-    pcPoints += 1;
-  }
-  //   console.log("Maquina Jugó", pcJugada);
-  //   console.log("Usuario Jugó", userJugada);
-  //   console.log("Maquina: ", pcPoints, "user: ", userPoints);
-  const jugada = document.createElement("p");
-  jugada.innerHTML = `<p>La jugada del <em>usuario</em> es: ${userJugada} y la jugada del <em>ordenador</em> es: ${pcJugada}.</p>`;
-  resultados.textContent = "";
-  resultados.appendChild(jugada);
-
-  contadorUsuario.innerHTML = `<p id="contador-usuario">Tus puntos: ${userPoints}</p>`;
-  contadorMaquina.innerHTML = `<p id='contador-ordenador'>Punatos de la máquina: ${pcPoints}</p>`;
-});
-
-//tijera
-btnTijera.addEventListener("click", function () {
-  //guardar eleccion
-  const userJugada = "tijera";
-  //compararar con maquina
-  const pcJugada = opciones[Math.floor(Math.random() * 3)];
+  win.className = ""; //eliminamos las clases de win
 
   //comparar con la maquina
-  if (pcJugada === "papel") {
-    //sumar puntos
-    userPoints++; //gana user
+  if (pcJugada === "tijera") {
+    pcIcon = "✌️";
+    pcPoints++; //gana Pc
+    win.textContent = textLose;
+    win.classList.add("lose");
+    pcWin = true;
   } else if (pcJugada === "piedra") {
-    pcPoints++; //gana pc
+    pcIcon = "✊";
+    userPoints++; //gana user
+    userWin = true;
+    win.textContent = textWin;
+    win.classList.add("win");
+  } else {
+    pcIcon = userIcon;
+    win.classList.add("win");
+    win.textContent = "Empate";
   }
-  //   console.log("Maquina Jugó", pcJugada);
-  //   console.log("Usuario Jugó", userJugada);
-  //   console.log("Maquina: ", pcPoints, "user: ", userPoints);
-  const jugada = document.createElement("p");
-  jugada.innerHTML = `<p>La jugada del <span class="jugador">usuario</span> es: <span class='jugada'>${userJugada}</span> y la jugada del ordenador es: <span class="jugada">${pcJugada}</span>.</p>`;
-  // jugada.textContent = `La jugada del usuario es: ${userJugada} y la jugada del ordenador es: ${pcJugada}.`;
-  // resultados.textContent = "";
-  // resultados.appendChild(jugada);
-  //   setTimeout(() => {
-  //     resultados.removeChild(jugada);
-  //   }, 5000);
+  //mostar la jugada en el html
+  resultados.textContent = "";
+  loading.textContent = "Jugando CPU...";
+  loading.classList.add("loading");
+  resultados.appendChild(loading);
+  setTimeout(() => {
+    loading.textContent = "";
+    jugada.textContent = ` ${userIcon} VS ${pcIcon}`;
+    resultados.appendChild(jugada);
+    win.classList.add("pulse");
+    resultados.appendChild(win);
+  }, 800);
 
+  //contadores
   contadorUsuario.innerHTML = `<p id="contador-usuario">Tus puntos: ${userPoints}</p>`;
   contadorMaquina.innerHTML = `<p id='contador-ordenador'>Punatos de la máquina: ${pcPoints}</p>`;
 });
 
-//actualizar puntos en el dom
+btnTijera.addEventListener("click", function () {
+  const userIcon = "✌️";
+  const pcJugada = opciones[Math.floor(Math.random() * 3)];
+  win.className = ""; //eliminamos las clases de win
+
+  //comparar con la maquina
+  if (pcJugada === "piedra") {
+    pcIcon = "✊";
+    pcPoints++; //gana Pc
+    win.textContent = textLose;
+    win.classList.add("lose");
+    pcWin = true;
+  } else if (pcJugada === "papel") {
+    pcIcon = "✋";
+    userPoints++; //gana user
+    userWin = true;
+    win.textContent = textWin;
+    win.classList.add("win");
+  } else {
+    pcIcon = userIcon;
+    win.classList.add("win");
+    win.textContent = "Empate";
+  }
+  //mostar la jugada en el html
+  resultados.textContent = "";
+  loading.textContent = "Jugando CPU...";
+  loading.classList.add("loading");
+  resultados.appendChild(loading);
+  setTimeout(() => {
+    loading.textContent = "";
+    jugada.textContent = ` ${userIcon} VS ${pcIcon}`;
+    resultados.appendChild(jugada);
+    win.classList.add("pulse");
+    resultados.appendChild(win);
+  }, 700);
+
+  //contadores
+  contadorUsuario.innerHTML = `<p id="contador-usuario">Tus puntos: ${userPoints}</p>`;
+  contadorMaquina.innerHTML = `<p id='contador-ordenador'>Punatos de la máquina: ${pcPoints}</p>`;
+});
